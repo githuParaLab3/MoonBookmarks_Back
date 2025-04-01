@@ -1,0 +1,90 @@
+package com.MoonBookmarks.MoonBookmarks_Back.entities;
+
+
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
+@Entity
+public class Colecao {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+
+    private String titulo;
+    private String descricao;
+    private String foto;
+
+    @ManyToOne
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "colecoes", cascade = CascadeType.ALL)
+    private List<Bookmark> bookmarks;
+
+    public Colecao(){}
+
+    public Colecao(String id, String titulo, String descricao, String foto, Usuario usuario, List<Bookmark> bookmarks) {
+        this.id = id;
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.foto = foto;
+        this.usuario = usuario;
+        this.bookmarks = bookmarks;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Bookmark> getBookmarks() {
+        return bookmarks;
+    }
+
+    public void setBookmarks(List<Bookmark> bookmarks) {
+        this.bookmarks = bookmarks;
+    }
+
+   
+}
