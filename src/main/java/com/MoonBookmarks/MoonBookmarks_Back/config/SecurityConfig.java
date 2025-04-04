@@ -19,7 +19,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Desabilita CSRF (para APIs REST)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Define JWT como Stateless
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll() // Libera os endpoints de autenticação
+                .requestMatchers("/**").permitAll() // Libera os endpoints de autenticação
                 .anyRequest().authenticated() // Exige autenticação para todas as outras rotas
             );
 
