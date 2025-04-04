@@ -3,6 +3,8 @@ package com.MoonBookmarks.MoonBookmarks_Back.controllers;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,20 +30,34 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public String login(@RequestBody AuthRequest request) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(request.getEmail());
-
-        if (usuarioOpt.isPresent() && passwordEncoder.matches(request.getSenha(), usuarioOpt.get().getSenha())) {
-            return jwtUtil.generateToken(request.getEmail());
+    public ResponseEntity<String> login(@RequestBody AuthRequest request) {
+        // Verifica se o email ou senha estão vazios
+        if (request.getEmail() == null || request.getEmail().isEmpty() || request.getSenha() == null || request.getSenha().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email ou senha não podem ser vazios");
         }
 
-        throw new RuntimeException("Credenciais inválidas");
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(request.getEmail());
+
+        // Verifica se o usuário existe e a senha corresponde
+        if (usuarioOpt.isPresent() && passwordEncoder.matches(request.getSenha(), usuarioOpt.get().getSenha())) {
+            // Gera o token JWT
+            String token = jwtUtil.generateToken(request.getEmail());
+            return ResponseEntity.ok(token); // Retorna o token gerado
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
     }
+
     @PostMapping("/register")
-    public String register(@RequestBody Usuario usuario) {
+    public ResponseEntity<String> register(@RequestBody Usuario usuario) {
         // Verifica se o email já está cadastrado
         if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
-            throw new RuntimeException("Usuário já registrado com esse e-mail");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário já registrado com esse e-mail");
+        }
+
+        // Verifica se o email e a senha não estão vazios
+        if (usuario.getEmail() == null || usuario.getEmail().isEmpty() || usuario.getSenha() == null || usuario.getSenha().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email e senha não podem ser vazios");
         }
 
         // Criptografa a senha
@@ -50,7 +66,6 @@ public class AuthController {
         // Salva o usuário no banco
         usuarioRepository.save(usuario);
 
-        // Retorna uma mensagem de sucesso ou o token JWT
-        return "Usuário registrado com sucesso!";
+        return ResponseEntity.status(HttpStatus.CREATED).body("Usuário registrado com sucesso!");
     }
 }
