@@ -25,8 +25,7 @@ public class Obra {
     @Enumerated(EnumType.STRING)
     private Tipo tipo;
     
-    @Lob
-    @Column(columnDefinition = "TEXT")
+
     private String imagem;
     
     @ElementCollection
