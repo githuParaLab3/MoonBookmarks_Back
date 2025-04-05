@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 
-
 @Entity
 public class Obra {
     @Id
@@ -25,7 +24,8 @@ public class Obra {
     @Enumerated(EnumType.STRING)
     private Tipo tipo;
     
-
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String imagem;
     
     @ElementCollection
