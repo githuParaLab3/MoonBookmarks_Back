@@ -19,6 +19,7 @@ import com.MoonBookmarks.MoonBookmarks_Back.services.BookmarkService;
 @RestController
 @RequestMapping("/bookmarks")
 public class BookmarkController {
+
     @Autowired
     private BookmarkService bookmarkService;
 
@@ -55,5 +56,12 @@ public class BookmarkController {
         }
         bookmarkService.deletar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // 🔥 Nova rota: Buscar bookmarks de um usuário específico
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<List<Bookmark>> listarBookmarksPorUsuario(@PathVariable String usuarioId) {
+        List<Bookmark> bookmarks = bookmarkService.listarPorUsuario(usuarioId);
+        return ResponseEntity.ok(bookmarks);
     }
 }

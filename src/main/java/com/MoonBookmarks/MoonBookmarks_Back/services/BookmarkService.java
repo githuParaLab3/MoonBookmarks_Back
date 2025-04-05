@@ -1,7 +1,5 @@
 package com.MoonBookmarks.MoonBookmarks_Back.services;
 
-
-
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Bookmark;
 import com.MoonBookmarks.MoonBookmarks_Back.repositories.BookmarkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +26,10 @@ public class BookmarkService {
 
     public void deletar(String id) {
         bookmarkRepository.deleteById(id);
+    }
+
+    // 🚀 Novo método para buscar bookmarks por usuário
+    public List<Bookmark> listarPorUsuario(String usuarioId) {
+        return bookmarkRepository.findByUsuarioId(usuarioId);
     }
 }
