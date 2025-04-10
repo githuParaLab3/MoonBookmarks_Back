@@ -1,6 +1,5 @@
 package com.MoonBookmarks.MoonBookmarks_Back.controllers;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -66,8 +65,12 @@ public class ColecaoController {
 
     @PostMapping("/{colecaoId}/bookmarks")
     public ResponseEntity<Colecao> adicionarBookmarksNaColecao(
-            @PathVariable String colecaoId, 
+            @PathVariable String colecaoId,
             @RequestBody String bookmarkId) {
+
+        // Log para verificar se o bookmarkId e colecaoId estão chegando corretamente
+        System.out.println("Coleção ID: " + colecaoId);
+        System.out.println("Bookmark ID: " + bookmarkId);
 
         // Buscar a coleção pelo ID
         Optional<Colecao> colecaoOptional = colecaoService.buscarPorId(colecaoId);
@@ -89,7 +92,11 @@ public class ColecaoController {
         colecao.getBookmarks().add(bookmark);
         colecaoService.salvar(colecao);
 
+        // Log para verificar a coleção após salvar
+        System.out.println("Coleção após adicionar o bookmark: " + colecao);
+
         // Retornar a coleção atualizada
         return ResponseEntity.ok(colecao);
     }
+
 }
