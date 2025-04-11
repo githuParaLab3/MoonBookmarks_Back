@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.MoonBookmarks.MoonBookmarks_Back.dto.BookmarkIdDTO;
+import com.MoonBookmarks.MoonBookmarks_Back.dto.BookmarkRequest;
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Bookmark;
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Colecao;
 import com.MoonBookmarks.MoonBookmarks_Back.services.BookmarkService;
@@ -67,17 +67,17 @@ public class ColecaoController {
     @PostMapping("/{colecaoId}/bookmarks")
     public ResponseEntity<Colecao> adicionarBookmarkNaColecao(
             @PathVariable String colecaoId,
-            @RequestBody BookmarkIdDTO dto) {
+            @RequestBody BookmarkRequest request) {
+
+        String bookmarkId = request.getBookmarkId();
 
         Optional<Colecao> colecaoOptional = colecaoService.buscarPorId(colecaoId);
-        if (colecaoOptional.isEmpty()) {
+        if (colecaoOptional.isEmpty())
             return ResponseEntity.notFound().build();
-        }
 
-        Optional<Bookmark> bookmarkOptional = bookmarkService.buscarPorId(dto.getBookmarkId());
-        if (bookmarkOptional.isEmpty()) {
+        Optional<Bookmark> bookmarkOptional = bookmarkService.buscarPorId(bookmarkId);
+        if (bookmarkOptional.isEmpty())
             return ResponseEntity.notFound().build();
-        }
 
         Colecao colecao = colecaoOptional.get();
         Bookmark bookmark = bookmarkOptional.get();

@@ -1,6 +1,6 @@
 package com.MoonBookmarks.MoonBookmarks_Back.dto;
 
-public class BookmarkIdDTO {
+public class BookmarkRequest {
     private String bookmarkId;
 
     public String getBookmarkId() {
