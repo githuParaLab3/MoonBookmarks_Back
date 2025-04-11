@@ -84,13 +84,8 @@ public class ColecaoController {
 
         Bookmark bookmark = bookmarkOptional.get();
 
-        // Verificar se o bookmark já está na coleção, para evitar duplicatas
-        if (!colecao.getBookmarks().contains(bookmark)) {
-            colecao.getBookmarks().add(bookmark);
-        }
-
-        // Salvar a coleção (não é necessário salvar o bookmark, pois ele já foi
-        // adicionado)
+        // Adicionar o bookmark à coleção
+        colecao.getBookmarks().add(bookmark);
         colecaoService.salvar(colecao);
 
         // Retornar a coleção atualizada
