@@ -68,10 +68,6 @@ public class ColecaoController {
             @PathVariable String colecaoId,
             @RequestBody String bookmarkId) {
 
-        // Log para verificar se o bookmarkId e colecaoId estão chegando corretamente
-        System.out.println("Coleção ID: " + colecaoId);
-        System.out.println("Bookmark ID: " + bookmarkId);
-
         // Buscar a coleção pelo ID
         Optional<Colecao> colecaoOptional = colecaoService.buscarPorId(colecaoId);
         if (colecaoOptional.isEmpty()) {
@@ -88,12 +84,14 @@ public class ColecaoController {
 
         Bookmark bookmark = bookmarkOptional.get();
 
-        // Adicionar o bookmark à coleção
-        colecao.getBookmarks().add(bookmark);
-        colecaoService.salvar(colecao);
+        // Verificar se o bookmark já está na coleção, para evitar duplicatas
+        if (!colecao.getBookmarks().contains(bookmark)) {
+            colecao.getBookmarks().add(bookmark);
+        }
 
-        // Log para verificar a coleção após salvar
-        System.out.println("Coleção após adicionar o bookmark: " + colecao);
+        // Salvar a coleção (não é necessário salvar o bookmark, pois ele já foi
+        // adicionado)
+        colecaoService.salvar(colecao);
 
         // Retornar a coleção atualizada
         return ResponseEntity.ok(colecao);
