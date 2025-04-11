@@ -1,7 +1,6 @@
 package com.MoonBookmarks.MoonBookmarks_Back.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.MoonBookmarks.MoonBookmarks_Back.dto.BookmarkRequest;
-import com.MoonBookmarks.MoonBookmarks_Back.entities.Bookmark;
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Colecao;
-import com.MoonBookmarks.MoonBookmarks_Back.services.BookmarkService;
 import com.MoonBookmarks.MoonBookmarks_Back.services.ColecaoService;
 
 @RestController
@@ -25,9 +21,6 @@ import com.MoonBookmarks.MoonBookmarks_Back.services.ColecaoService;
 public class ColecaoController {
     @Autowired
     private ColecaoService colecaoService;
-
-    @Autowired
-    private BookmarkService bookmarkService;
 
     @GetMapping
     public List<Colecao> listarColecoes() {
@@ -62,33 +55,6 @@ public class ColecaoController {
         }
         colecaoService.deletar(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{colecaoId}/bookmarks")
-    public ResponseEntity<Colecao> adicionarBookmarkNaColecao(
-            @PathVariable String colecaoId,
-            @RequestBody String bookmarkIdRaw) {
-
-        // Remover aspas extras se vier como JSON string simples
-        String bookmarkId = bookmarkIdRaw.replace("\"", "");
-
-        Optional<Colecao> colecaoOptional = colecaoService.buscarPorId(colecaoId);
-        if (colecaoOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Optional<Bookmark> bookmarkOptional = bookmarkService.buscarPorId(bookmarkId);
-        if (bookmarkOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Colecao colecao = colecaoOptional.get();
-        Bookmark bookmark = bookmarkOptional.get();
-
-        colecao.getBookmarks().add(bookmark);
-        colecaoService.salvar(colecao);
-
-        return ResponseEntity.ok(colecao);
     }
     
 
