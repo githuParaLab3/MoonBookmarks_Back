@@ -7,13 +7,18 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.MoonBookmarks.MoonBookmarks_Back.entities.Bookmark;
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Colecao;
+import com.MoonBookmarks.MoonBookmarks_Back.repositories.BookmarkRepository;
 import com.MoonBookmarks.MoonBookmarks_Back.repositories.ColecaoRepository;
 
 @Service
 public class ColecaoService {
     @Autowired
     private ColecaoRepository colecaoRepository;
+
+    @Autowired
+    private BookmarkRepository bookmarkRepository;
 
     public List<Colecao> listarTodas() {
         return colecaoRepository.findAll();
@@ -29,5 +34,19 @@ public class ColecaoService {
 
     public void deletar(String id) {
         colecaoRepository.deleteById(id);
+    }
+
+    public void adicionarBookmarkNaColecao(String colecaoId, String bookmarkId) {
+        Colecao colecao = colecaoRepository.findById(colecaoId)
+            .orElseThrow(() -> new RuntimeException("Coleção não encontrada"));
+
+        Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
+            .orElseThrow(() -> new RuntimeException("Bookmark não encontrado"));
+
+        // Adiciona a coleção ao bookmark (porque ManyToMany está no Bookmark)
+        if (!bookmark.getColecoes().contains(colecao)) {
+            bookmark.getColecoes().add(colecao);
+            bookmarkRepository.save(bookmark);
+        }
     }
 }

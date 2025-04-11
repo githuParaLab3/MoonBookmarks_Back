@@ -56,6 +56,15 @@ public class ColecaoController {
         colecaoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{colecaoId}/bookmarks/{bookmarkId}")
+    public ResponseEntity<String> adicionarBookmark(
+        @PathVariable String colecaoId,
+        @PathVariable String bookmarkId
+    ) {
+        colecaoService.adicionarBookmarkNaColecao(colecaoId, bookmarkId);
+        return ResponseEntity.ok("Bookmark adicionado à coleção com sucesso!");
+    }
     
 
 }
