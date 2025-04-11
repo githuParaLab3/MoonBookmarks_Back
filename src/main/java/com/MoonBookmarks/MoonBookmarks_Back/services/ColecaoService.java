@@ -17,9 +17,6 @@ public class ColecaoService {
     @Autowired
     private ColecaoRepository colecaoRepository;
 
-    @Autowired
-    private BookmarkRepository bookmarkRepository;
-
     public List<Colecao> listarTodas() {
         return colecaoRepository.findAll();
     }
@@ -36,17 +33,5 @@ public class ColecaoService {
         colecaoRepository.deleteById(id);
     }
 
-    public void adicionarBookmarkNaColecao(String colecaoId, String bookmarkId) {
-        Colecao colecao = colecaoRepository.findById(colecaoId)
-            .orElseThrow(() -> new RuntimeException("Coleção não encontrada"));
-
-        Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
-            .orElseThrow(() -> new RuntimeException("Bookmark não encontrado"));
-
-        // Adiciona a coleção ao bookmark (porque ManyToMany está no Bookmark)
-        if (!bookmark.getColecoes().contains(colecao)) {
-            bookmark.getColecoes().add(colecao);
-            bookmarkRepository.save(bookmark);
-        }
-    }
+   
 }
