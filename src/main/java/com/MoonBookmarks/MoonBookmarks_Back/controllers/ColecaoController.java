@@ -65,27 +65,24 @@ public class ColecaoController {
     }
 
     @PostMapping("/{colecaoId}/bookmarks")
-    public ResponseEntity<Colecao> adicionarBookmarkNaColecao(
-            @PathVariable String colecaoId,
-            @RequestBody BookmarkRequest request) {
-
-        String bookmarkId = request.getBookmarkId();
-
+    public ResponseEntity<Colecao> adicionarBookmarkNaColecao(@PathVariable String colecaoId, @RequestBody String bookmarkId) {
         Optional<Colecao> colecaoOptional = colecaoService.buscarPorId(colecaoId);
-        if (colecaoOptional.isEmpty())
+        if (colecaoOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
-
-        Optional<Bookmark> bookmarkOptional = bookmarkService.buscarPorId(bookmarkId);
-        if (bookmarkOptional.isEmpty())
-            return ResponseEntity.notFound().build();
-
+        }
+    
         Colecao colecao = colecaoOptional.get();
+        Optional<Bookmark> bookmarkOptional = bookmarkService.buscarPorId(bookmarkId);
+        if (bookmarkOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+    
         Bookmark bookmark = bookmarkOptional.get();
-
         colecao.getBookmarks().add(bookmark);
         colecaoService.salvar(colecao);
-
+    
         return ResponseEntity.ok(colecao);
     }
+    
 
 }
