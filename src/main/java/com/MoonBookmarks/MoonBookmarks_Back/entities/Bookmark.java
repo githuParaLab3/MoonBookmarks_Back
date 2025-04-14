@@ -9,8 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import java.util.ArrayList;
 
 @Entity
 public class Bookmark {
@@ -31,8 +31,7 @@ public class Bookmark {
     private float progresso;
 
     @ManyToMany(mappedBy = "bookmarks")
-   
-    private List<Colecao> colecoes;
+    private List<Colecao> colecoes = new ArrayList<>();
 
     private String comentario;
 

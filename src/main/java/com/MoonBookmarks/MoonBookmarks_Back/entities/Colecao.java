@@ -16,8 +16,7 @@ import jakarta.persistence.JoinTable;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.FetchType;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import java.util.ArrayList;
 
 @Entity
 public class Colecao {
@@ -44,7 +43,7 @@ public class Colecao {
         inverseJoinColumns = @JoinColumn(name = "bookmark_id")
     )
    
-    private List<Bookmark> bookmarks;
+    private List<Bookmark> bookmarks  = new ArrayList<>();
 
     public Colecao() {}
 
