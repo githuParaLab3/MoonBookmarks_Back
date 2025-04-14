@@ -31,15 +31,14 @@ public class ColecaoMapper {
         colecao.setTitulo(dto.getTitulo());
         colecao.setDescricao(dto.getDescricao());
         colecao.setFoto(dto.getFoto());
-        colecao.setUsuario(dto.getUsuario()); // Usuario já está no DTO
-
-        // Para as coleções de Bookmarks, você pode fazer a lógica inversa, 
-        // se necessário, para vincular os Bookmarks de volta à Coleção.
-        // Aqui estamos apenas pegando os Bookmarks do DTO e mapeando de volta
+        colecao.setUsuario(dto.getUsuario());
+    
+        // Se necessário, buscar os Bookmarks no banco com base nos IDs
         colecao.setBookmarks(dto.getBookmarks().stream()
-                .map(BookmarkMapper::fromDTO) // Mapeando cada BookmarkDTO de volta para a entidade Bookmark
+                .map(BookmarkMapper::fromDTO) // Mapeando cada BookmarkDTO para a entidade Bookmark
                 .collect(Collectors.toList()));
         
         return colecao;
     }
+
 }

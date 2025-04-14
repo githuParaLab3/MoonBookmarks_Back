@@ -31,12 +31,12 @@ public class BookmarkMapper {
         bookmark.setUsuario(dto.getUsuario());
         bookmark.setStatus(dto.getStatus());
         bookmark.setProgresso(dto.getProgresso());
-        
-        // Para o caso de criar a entidade, você precisaria fazer o contrário: recuperar as coleções pelo ID.
-        // Ou, se você deseja manter as coleções diretamente na entidade, você teria que implementar essa lógica.
-        
-        bookmark.setColecoes(null); // ou implementa a lógica para associar as coleções a partir de dto
         bookmark.setComentario(dto.getComentario());
+        
+        // Lógica para associar as coleções
+        // Se você tiver IDs das coleções no DTO, precisa buscar as coleções no banco e associá-las ao Bookmark
+        bookmark.setColecoes(null); // ou implemente a lógica de associar as coleções aqui
         return bookmark;
     }
+
 }
