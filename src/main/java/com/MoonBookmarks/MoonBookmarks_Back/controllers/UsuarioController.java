@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Usuario;
 import com.MoonBookmarks.MoonBookmarks_Back.services.UsuarioService;
 
@@ -21,9 +21,6 @@ import com.MoonBookmarks.MoonBookmarks_Back.services.UsuarioService;
 public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @GetMapping
     public List<Usuario> listarUsuarios() {
@@ -48,7 +45,6 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
         usuario.setId(id);
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return ResponseEntity.ok(usuarioService.salvar(usuario));
     }
 
