@@ -14,7 +14,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.Basic;
+import jakarta.persistence.FetchType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
@@ -29,6 +30,7 @@ public class Colecao {
     private String descricao;
 
     @Lob
+    @Basic(fetch=FetchType.EAGER)
     @Column(columnDefinition = "TEXT")
     private String foto;
 
