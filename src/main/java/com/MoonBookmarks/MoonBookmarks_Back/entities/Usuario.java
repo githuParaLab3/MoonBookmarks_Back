@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Column;
 
 @Entity
 public class Usuario {
@@ -14,6 +16,9 @@ public class Usuario {
     private String email;
     private String nome;
     private String senha;
+    
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String fotoPerfil;
 
     public Usuario() {}
