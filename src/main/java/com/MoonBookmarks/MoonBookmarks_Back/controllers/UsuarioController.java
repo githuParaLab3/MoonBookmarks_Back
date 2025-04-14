@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Usuario;
 import com.MoonBookmarks.MoonBookmarks_Back.services.UsuarioService;
 

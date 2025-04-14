@@ -38,7 +38,7 @@ public class ColecaoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ColecaoDTO> atualizarColecao(@PathVariable String id, @RequestBody ColecaoDTO colecaoDTO) {
-        // Atualizando coleção com base no DTO recebido
+        // Atualizando a coleção com base no DTO recebido
         ColecaoDTO updatedColecao = colecaoService.salvar(colecaoDTO);
         return ResponseEntity.ok(updatedColecao);
     }
