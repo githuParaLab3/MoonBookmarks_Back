@@ -64,4 +64,7 @@ public class BookmarkController {
         List<Bookmark> bookmarks = bookmarkService.listarPorUsuario(usuarioId);
         return ResponseEntity.ok(bookmarks);
     }
+    
+    
+    
 }

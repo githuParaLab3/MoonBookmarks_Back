@@ -13,6 +13,8 @@ import java.util.List;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
@@ -39,6 +41,7 @@ public class Colecao {
         joinColumns = @JoinColumn(name = "colecao_id"),
         inverseJoinColumns = @JoinColumn(name = "bookmark_id")
     )
+    @JsonManagedReference
     private List<Bookmark> bookmarks;
 
     public Colecao() {}
