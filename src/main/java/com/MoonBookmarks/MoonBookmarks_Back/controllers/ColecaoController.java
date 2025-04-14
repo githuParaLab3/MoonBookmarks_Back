@@ -71,9 +71,14 @@ public class ColecaoController {
     }
 
     @GetMapping("/{colecaoId}/bookmarks")
-    public List<Bookmark> listarBookmarks(@PathVariable String colecaoId) {
-        return colecaoService.listarBookmarksDaColecao(colecaoId);
+    public ResponseEntity<List<Bookmark>> listarBookmarks(@PathVariable String colecaoId) {
+        List<Bookmark> bookmarks = colecaoService.listarBookmarksDaColecao(colecaoId);
+        if (bookmarks.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Caso a lista esteja vazia, retorna status 204 (No Content)
+        }
+        return ResponseEntity.ok(bookmarks);
     }
+
 
 
 }
