@@ -1,13 +1,19 @@
 package com.MoonBookmarks.MoonBookmarks_Back.services;
 
+import com.MoonBookmarks.MoonBookmarks_Back.dto.BookmarkDTO;
+import com.MoonBookmarks.MoonBookmarks_Back.dto.ColecaoDTO;
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Bookmark;
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Colecao;
+import com.MoonBookmarks.MoonBookmarks_Back.mappers.BookmarkMapper;
+import com.MoonBookmarks.MoonBookmarks_Back.mappers.ColecaoMapper;
 import com.MoonBookmarks.MoonBookmarks_Back.repositories.BookmarkRepository;
 import com.MoonBookmarks.MoonBookmarks_Back.repositories.ColecaoRepository;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookmarkService {
@@ -18,34 +24,37 @@ public class BookmarkService {
     @Autowired
     private ColecaoRepository colecaoRepository;
 
-    public List<Bookmark> listarTodos() {
-        return bookmarkRepository.findAll();
+    public List<BookmarkDTO> listarTodos() {
+        List<Bookmark> bookmarks = bookmarkRepository.findAll();
+        return bookmarks.stream()
+                        .map(BookmarkMapper::toDTO)
+                        .collect(Collectors.toList());
     }
 
-    public Optional<Bookmark> buscarPorId(String id) {
-        return bookmarkRepository.findById(id);
+    public Optional<BookmarkDTO> buscarPorId(String id) {
+        Optional<Bookmark> bookmark = bookmarkRepository.findById(id);
+        return bookmark.map(BookmarkMapper::toDTO);
     }
 
-    public Bookmark salvar(Bookmark bookmark) {
-        return bookmarkRepository.save(bookmark);
+    public BookmarkDTO salvar(BookmarkDTO bookmarkDTO) {
+        Bookmark bookmark = BookmarkMapper.fromDTO(bookmarkDTO);
+        Bookmark savedBookmark = bookmarkRepository.save(bookmark);
+        return BookmarkMapper.toDTO(savedBookmark);
     }
 
     public void deletar(String id) {
         bookmarkRepository.deleteById(id);
     }
 
-    // 🚀 Novo método para buscar bookmarks por usuário
-    public List<Bookmark> listarPorUsuario(String usuarioId) {
-        return bookmarkRepository.findByUsuarioId(usuarioId);
+    public List<BookmarkDTO> listarPorUsuario(String usuarioId) {
+        List<Bookmark> bookmarks = bookmarkRepository.findByUsuarioId(usuarioId);
+        return bookmarks.stream()
+                        .map(BookmarkMapper::toDTO)
+                        .collect(Collectors.toList());
     }
 
-    public Bookmark adicionarColecaoAoBookmark(
-        String bookmarkId,
-        String colecaoId
-    ) {
-        Optional<Bookmark> bookmarkOpt = bookmarkRepository.findById(
-            bookmarkId
-        );
+    public BookmarkDTO adicionarColecaoAoBookmark(String bookmarkId, String colecaoId) {
+        Optional<Bookmark> bookmarkOpt = bookmarkRepository.findById(bookmarkId);
         Optional<Colecao> colecaoOpt = colecaoRepository.findById(colecaoId);
 
         if (bookmarkOpt.isPresent() && colecaoOpt.isPresent()) {
@@ -60,21 +69,16 @@ public class BookmarkService {
                 colecao.getBookmarks().add(bookmark);
             }
 
-            colecaoRepository.save(colecao); // Salvar colecao
-            return bookmarkRepository.save(bookmark); // Salvar bookmark
+            colecaoRepository.save(colecao);
+            Bookmark savedBookmark = bookmarkRepository.save(bookmark);
+            return BookmarkMapper.toDTO(savedBookmark);
         }
 
         throw new RuntimeException("Bookmark ou Coleção não encontrado.");
     }
 
-    // Método para remover uma coleção do bookmark
-    public Bookmark removerColecaoDoBookmark(
-        String bookmarkId,
-        String colecaoId
-    ) {
-        Optional<Bookmark> bookmarkOpt = bookmarkRepository.findById(
-            bookmarkId
-        );
+    public BookmarkDTO removerColecaoDoBookmark(String bookmarkId, String colecaoId) {
+        Optional<Bookmark> bookmarkOpt = bookmarkRepository.findById(bookmarkId);
         Optional<Colecao> colecaoOpt = colecaoRepository.findById(colecaoId);
 
         if (bookmarkOpt.isPresent() && colecaoOpt.isPresent()) {
@@ -84,20 +88,20 @@ public class BookmarkService {
             bookmark.getColecoes().remove(colecao);
             colecao.getBookmarks().remove(bookmark);
 
-            colecaoRepository.save(colecao); // Salvar colecao
-            return bookmarkRepository.save(bookmark); // Salvar bookmark
+            colecaoRepository.save(colecao);
+            Bookmark savedBookmark = bookmarkRepository.save(bookmark);
+            return BookmarkMapper.toDTO(savedBookmark);
         }
 
         throw new RuntimeException("Bookmark ou Coleção não encontrado.");
     }
 
-    // Método para listar as coleções de um bookmark
-    public List<Colecao> listarColecoesDoBookmark(String bookmarkId) {
-        Optional<Bookmark> bookmarkOpt = bookmarkRepository.findById(
-            bookmarkId
-        );
+    public List<ColecaoDTO> listarColecoesDoBookmark(String bookmarkId) {
+        Optional<Bookmark> bookmarkOpt = bookmarkRepository.findById(bookmarkId);
         if (bookmarkOpt.isPresent()) {
-            return bookmarkOpt.get().getColecoes();
+            return bookmarkOpt.get().getColecoes().stream()
+                               .map(ColecaoMapper::toDTO)
+                               .collect(Collectors.toList());
         }
 
         throw new RuntimeException("Bookmark não encontrado.");

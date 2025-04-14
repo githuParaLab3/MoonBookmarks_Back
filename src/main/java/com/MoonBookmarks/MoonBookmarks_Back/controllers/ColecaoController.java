@@ -1,54 +1,53 @@
 package com.MoonBookmarks.MoonBookmarks_Back.controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import com.MoonBookmarks.MoonBookmarks_Back.dto.ColecaoDTO;
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Bookmark;
-import com.MoonBookmarks.MoonBookmarks_Back.entities.Colecao;
 import com.MoonBookmarks.MoonBookmarks_Back.services.ColecaoService;
+import com.MoonBookmarks.MoonBookmarks_Back.mappers.ColecaoMapper;
+import com.MoonBookmarks.MoonBookmarks_Back.entities.Colecao;
 
 @RestController
 @RequestMapping("/colecoes")
 public class ColecaoController {
+
     @Autowired
     private ColecaoService colecaoService;
 
-    
-
     @GetMapping
-    public List<Colecao> listarColecoes() {
-        return colecaoService.listarTodas();
+    public List<ColecaoDTO> listarColecoes() {
+        return colecaoService.listarTodas().stream()
+                .map(ColecaoMapper::toDTO) // Converte a Coleção para DTO
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Colecao> buscarColecao(@PathVariable String id) {
+    public ResponseEntity<ColecaoDTO> buscarColecao(@PathVariable String id) {
         return colecaoService.buscarPorId(id)
-                .map(ResponseEntity::ok)
+                .map(colecao -> ResponseEntity.ok(ColecaoMapper.toDTO(colecao))) // Converte a Coleção para DTO
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Colecao> criarColecao(@RequestBody Colecao colecao) {
-        return ResponseEntity.status(201).body(colecaoService.salvar(colecao));
+    public ResponseEntity<ColecaoDTO> criarColecao(@RequestBody ColecaoDTO colecaoDTO) {
+        Colecao colecao = ColecaoMapper.fromDTO(colecaoDTO); // Converte o DTO para entidade
+        return ResponseEntity.status(201).body(ColecaoMapper.toDTO(colecaoService.salvar(colecao)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Colecao> atualizarColecao(@PathVariable String id, @RequestBody Colecao colecao) {
+    public ResponseEntity<ColecaoDTO> atualizarColecao(@PathVariable String id, @RequestBody ColecaoDTO colecaoDTO) {
         if (!colecaoService.buscarPorId(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
+        Colecao colecao = ColecaoMapper.fromDTO(colecaoDTO); // Converte o DTO para entidade
         colecao.setId(id);
-        return ResponseEntity.ok(colecaoService.salvar(colecao));
+        return ResponseEntity.ok(ColecaoMapper.toDTO(colecaoService.salvar(colecao)));
     }
 
     @DeleteMapping("/{id}")
@@ -61,24 +60,23 @@ public class ColecaoController {
     }
 
     @PostMapping("/{colecaoId}/bookmarks/{bookmarkId}")
-    public Colecao adicionarBookmark(@PathVariable String colecaoId, @PathVariable String bookmarkId) {
-        return colecaoService.adicionarBookmarkNaColecao(colecaoId, bookmarkId);
+    public ColecaoDTO adicionarBookmark(@PathVariable String colecaoId, @PathVariable String bookmarkId) {
+        Colecao colecao = colecaoService.adicionarBookmarkNaColecao(colecaoId, bookmarkId);
+        return ColecaoMapper.toDTO(colecao); // Retorna o DTO da coleção
     }
 
     @DeleteMapping("/{colecaoId}/bookmarks/{bookmarkId}")
-    public Colecao removerBookmark(@PathVariable String colecaoId, @PathVariable String bookmarkId) {
-        return colecaoService.removerBookmarkDaColecao(colecaoId, bookmarkId);
+    public ColecaoDTO removerBookmark(@PathVariable String colecaoId, @PathVariable String bookmarkId) {
+        Colecao colecao = colecaoService.removerBookmarkDaColecao(colecaoId, bookmarkId);
+        return ColecaoMapper.toDTO(colecao); // Retorna o DTO da coleção
     }
 
     @GetMapping("/{colecaoId}/bookmarks")
     public ResponseEntity<List<Bookmark>> listarBookmarks(@PathVariable String colecaoId) {
         List<Bookmark> bookmarks = colecaoService.listarBookmarksDaColecao(colecaoId);
         if (bookmarks.isEmpty()) {
-            return ResponseEntity.noContent().build(); // Caso a lista esteja vazia, retorna status 204 (No Content)
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(bookmarks);
     }
-
-
-
 }
