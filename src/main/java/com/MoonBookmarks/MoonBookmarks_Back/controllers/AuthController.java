@@ -39,6 +39,16 @@ public class AuthController {
         }
     
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(request.getEmail());
+        
+        if (usuarioOpt.isPresent()) {
+            String senhaBruta = request.getSenha();
+            String senhaCriptografada = usuarioOpt.get().getSenha();
+        
+            System.out.println("Senha enviada: " + senhaBruta);
+            System.out.println("Senha armazenada: " + senhaCriptografada);
+            System.out.println("Bate? " + passwordEncoder.matches(senhaBruta, senhaCriptografada));
+        }
+
     
         // Verifica se o usuário existe e a senha corresponde
         if (usuarioOpt.isPresent() && passwordEncoder.matches(request.getSenha(), usuarioOpt.get().getSenha())) {
