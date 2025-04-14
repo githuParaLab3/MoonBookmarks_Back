@@ -39,7 +39,6 @@ public class Colecao {
         joinColumns = @JoinColumn(name = "colecao_id"),
         inverseJoinColumns = @JoinColumn(name = "bookmark_id")
     )
-    @JsonManagedReference // Gerencia a serialização de coleções de bookmarks
     private List<Bookmark> bookmarks;
 
     public Colecao() {}
