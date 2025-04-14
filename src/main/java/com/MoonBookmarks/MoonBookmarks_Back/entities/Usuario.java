@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Column;
+import jakarta.persistence.Basic;
+import jakarta.persistence.FetchType;
 
 @Entity
 public class Usuario {
@@ -18,6 +20,7 @@ public class Usuario {
     private String senha;
     
     @Lob
+    @Basic(fetch = FetchType.EAGER) 
     @Column(columnDefinition = "TEXT")
     private String fotoPerfil;
 
