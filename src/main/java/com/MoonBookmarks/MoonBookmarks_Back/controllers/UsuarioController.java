@@ -48,7 +48,6 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
         usuario.setId(id);
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return ResponseEntity.ok(usuarioService.salvar(usuario));
     }
 
