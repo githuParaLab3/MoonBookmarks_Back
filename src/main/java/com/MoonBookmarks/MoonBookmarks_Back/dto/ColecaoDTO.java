@@ -1,6 +1,6 @@
 package com.MoonBookmarks.MoonBookmarks_Back.dto;
+
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Usuario;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ColecaoDTO {
@@ -9,8 +9,9 @@ public class ColecaoDTO {
     private String descricao;
     private String foto;
     private Usuario usuario; // Incluindo o usuário diretamente
-    private List<BookmarkDTO> bookmarks = new ArrayList<>();  // Inicializando com uma lista vazia
- 
+    private List<String> bookmarkIds;  // Usando apenas IDs das bookmarks
+    
+    // Getters e setters
     public String getId() {
         return id;
     }
@@ -41,10 +42,10 @@ public class ColecaoDTO {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-    public List<BookmarkDTO> getBookmarks() {
-        return bookmarks;
+    public List<String> getBookmarkIds() {
+        return bookmarkIds;
     }
-    public void setBookmarks(List<BookmarkDTO> bookmarks) {
-        this.bookmarks = bookmarks != null ? bookmarks : new ArrayList<>();  // Garantindo que não seja null
+    public void setBookmarkIds(List<String> bookmarkIds) {
+        this.bookmarkIds = bookmarkIds;
     }
 }

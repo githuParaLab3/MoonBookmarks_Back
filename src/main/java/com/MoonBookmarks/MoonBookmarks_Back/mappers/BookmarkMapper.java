@@ -1,12 +1,14 @@
 package com.MoonBookmarks.MoonBookmarks_Back.mappers;
 
-
 import com.MoonBookmarks.MoonBookmarks_Back.dto.BookmarkDTO;
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Bookmark;
+
+import com.MoonBookmarks.MoonBookmarks_Back.repositories.ColecaoRepository;
 import java.util.stream.Collectors;
 
 public class BookmarkMapper {
 
+    // Mapeia a entidade Bookmark para o DTO BookmarkDTO
     public static BookmarkDTO toDTO(Bookmark bookmark) {
         BookmarkDTO dto = new BookmarkDTO();
         dto.setId(bookmark.getId());
@@ -14,17 +16,18 @@ public class BookmarkMapper {
         dto.setUsuario(bookmark.getUsuario());
         dto.setStatus(bookmark.getStatus());
         dto.setProgresso(bookmark.getProgresso());
-        
-        // Agora você carrega as coleções completas no DTO
-        dto.setColecoes(bookmark.getColecoes().stream()
-                .map(ColecaoMapper::toDTO)  // Aqui você usa o mapper de Colecao para mapear para DTO completo
+
+        // Carregar as coleções como IDs no DTO
+        dto.setColecaoIds(bookmark.getColecoes().stream()
+                .map(colecao -> colecao.getId())  // Pegando apenas o ID da coleção
                 .collect(Collectors.toList()));
-        
+
         dto.setComentario(bookmark.getComentario());
         return dto;
     }
 
-    public static Bookmark fromDTO(BookmarkDTO dto) {
+    // Mapeia o DTO BookmarkDTO de volta para a entidade Bookmark
+    public static Bookmark fromDTO(BookmarkDTO dto, ColecaoRepository colecaoRepository) {
         Bookmark bookmark = new Bookmark();
         bookmark.setId(dto.getId());
         bookmark.setObra(dto.getObra());
@@ -32,11 +35,12 @@ public class BookmarkMapper {
         bookmark.setStatus(dto.getStatus());
         bookmark.setProgresso(dto.getProgresso());
         bookmark.setComentario(dto.getComentario());
-        
-        // Lógica para associar as coleções
-        // Se você tiver IDs das coleções no DTO, precisa buscar as coleções no banco e associá-las ao Bookmark
-        bookmark.setColecoes(null); // ou implemente a lógica de associar as coleções aqui
+
+        // Buscar as coleções no banco com base nos IDs
+        if (dto.getColecaoIds() != null) {
+            bookmark.setColecoes(colecaoRepository.findAllById(dto.getColecaoIds()));  // Busca as coleções no banco usando os IDs
+        }
+
         return bookmark;
     }
-
 }

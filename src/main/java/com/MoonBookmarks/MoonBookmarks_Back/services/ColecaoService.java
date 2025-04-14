@@ -37,10 +37,11 @@ public class ColecaoService {
     }
 
     public ColecaoDTO salvar(ColecaoDTO colecaoDTO) {
-        Colecao colecao = ColecaoMapper.fromDTO(colecaoDTO);
+        Colecao colecao = ColecaoMapper.fromDTO(colecaoDTO, bookmarkRepository); // Passando o repositório de Bookmark
         Colecao savedColecao = colecaoRepository.save(colecao);
         return ColecaoMapper.toDTO(savedColecao);
     }
+
 
     public void deletar(String id) {
         colecaoRepository.deleteById(id);
