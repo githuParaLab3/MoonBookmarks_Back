@@ -31,7 +31,7 @@ public class Bookmark {
     private float progresso;
 
     @ManyToMany(mappedBy = "bookmarks")
-    @JsonBackReference
+   
     private List<Colecao> colecoes;
 
     private String comentario;

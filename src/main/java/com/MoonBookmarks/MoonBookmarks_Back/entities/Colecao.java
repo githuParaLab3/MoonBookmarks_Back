@@ -43,7 +43,7 @@ public class Colecao {
         joinColumns = @JoinColumn(name = "colecao_id"),
         inverseJoinColumns = @JoinColumn(name = "bookmark_id")
     )
-    @JsonManagedReference
+   
     private List<Bookmark> bookmarks;
 
     public Colecao() {}
