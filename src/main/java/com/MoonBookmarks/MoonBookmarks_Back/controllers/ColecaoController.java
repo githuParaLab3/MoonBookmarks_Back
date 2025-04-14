@@ -12,20 +12,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.Optional;
+
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Bookmark;
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Colecao;
 import com.MoonBookmarks.MoonBookmarks_Back.services.ColecaoService;
-import com.MoonBookmarks.MoonBookmarks_Back.repositories.ColecaoRepository;
 
 @RestController
 @RequestMapping("/colecoes")
 public class ColecaoController {
     @Autowired
     private ColecaoService colecaoService;
-    
-    @Autowired
-    private ColecaoRepository colecaoRepository;
 
     
 
@@ -47,19 +43,13 @@ public class ColecaoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizarColecao(@PathVariable String id, @RequestBody Colecao colecaoAtualizada) {
-        Optional<Colecao> optional = colecaoRepository.findById(id);
-        if (optional.isEmpty()) return ResponseEntity.notFound().build();
-    
-        Colecao colecao = optional.get();
-        colecao.setTitulo(colecaoAtualizada.getTitulo());
-        colecao.setDescricao(colecaoAtualizada.getDescricao());
-        colecao.setFoto(colecaoAtualizada.getFoto());
-    
-        // NUNCA setar os bookmarks diretamente aqui se estiver usando Jackson com entidades completas
-        return ResponseEntity.ok(colecaoRepository.save(colecao));
+    public ResponseEntity<Colecao> atualizarColecao(@PathVariable String id, @RequestBody Colecao colecao) {
+        if (!colecaoService.buscarPorId(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        colecao.setId(id);
+        return ResponseEntity.ok(colecaoService.salvar(colecao));
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarColecao(@PathVariable String id) {
