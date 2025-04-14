@@ -58,7 +58,7 @@ public class BookmarkController {
         return ResponseEntity.noContent().build();
     }
 
-    // 🔥 Nova rota: Buscar bookmarks de um usuário específico
+    
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<Bookmark>> listarBookmarksPorUsuario(@PathVariable String usuarioId) {
         List<Bookmark> bookmarks = bookmarkService.listarPorUsuario(usuarioId);

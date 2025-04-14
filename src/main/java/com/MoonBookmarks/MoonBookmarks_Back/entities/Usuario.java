@@ -20,7 +20,7 @@ public class Usuario {
     private String senha;
     
     @Lob
-    @Basic(fetch = FetchType.LAZY) 
+    @Basic(fetch=FetchType.EAGER)
     @Column(columnDefinition = "TEXT")
     private String fotoPerfil;
 

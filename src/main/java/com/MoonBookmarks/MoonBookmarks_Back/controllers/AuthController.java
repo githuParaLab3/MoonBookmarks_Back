@@ -15,7 +15,8 @@ import com.MoonBookmarks.MoonBookmarks_Back.dto.AuthRequest;
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Usuario;
 import com.MoonBookmarks.MoonBookmarks_Back.repositories.UsuarioRepository;
 import com.MoonBookmarks.MoonBookmarks_Back.util.JwtUtil;
-import com.MoonBookmarks.MoonBookmarks_Back.dto.AuthResponse;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,10 +32,10 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest request) {
         // Verifica se o email ou senha estão vazios
         if (request.getEmail() == null || request.getEmail().isEmpty() || request.getSenha() == null || request.getSenha().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Email ou senha não podem ser vazios"));
         }
     
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(request.getEmail());
@@ -44,18 +45,15 @@ public class AuthController {
             // Gera o token JWT
             String token = jwtUtil.generateToken(request.getEmail());
     
-            // Prepara a resposta com os dados do usuário e o token
-            Usuario usuario = usuarioOpt.get();
-            AuthResponse response = new AuthResponse();
-            response.setToken(token);
-            response.setUserId(usuario.getId().toString());
-            response.setNome(usuario.getNome());
-            response.setEmail(usuario.getEmail());
+            // Retorna o token e o id do usuário em um Map
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            response.put("userId", usuarioOpt.get().getId().toString()); // Incluindo o id do usuário na resposta
     
-            return ResponseEntity.ok(response); // Retorna o AuthResponse com o token e o id do usuário
+            return ResponseEntity.ok(response); // Retorna o token e o id do usuário
         }
     
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Credenciais inválidas"));
     }
 
 
