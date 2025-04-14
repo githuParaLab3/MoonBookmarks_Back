@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.MoonBookmarks.MoonBookmarks_Back.entities.Bookmark;
 import com.MoonBookmarks.MoonBookmarks_Back.services.BookmarkService;
-
+import com.MoonBookmarks.MoonBookmarks_Back.entities.Colecao;
 @RestController
 @RequestMapping("/bookmarks")
 public class BookmarkController {
@@ -64,6 +64,21 @@ public class BookmarkController {
         List<Bookmark> bookmarks = bookmarkService.listarPorUsuario(usuarioId);
         return ResponseEntity.ok(bookmarks);
     }
+    
+    @PostMapping("/{bookmarkId}/colecoes/{colecaoId}")
+       public ResponseEntity<Bookmark> adicionarColecao(@PathVariable String bookmarkId, @PathVariable String colecaoId) {
+           return ResponseEntity.ok(bookmarkService.adicionarColecaoAoBookmark(bookmarkId, colecaoId));
+       }
+   
+       @DeleteMapping("/{bookmarkId}/colecoes/{colecaoId}")
+       public ResponseEntity<Bookmark> removerColecao(@PathVariable String bookmarkId, @PathVariable String colecaoId) {
+           return ResponseEntity.ok(bookmarkService.removerColecaoDoBookmark(bookmarkId, colecaoId));
+       }
+   
+       @GetMapping("/{bookmarkId}/colecoes")
+       public ResponseEntity<List<Colecao>> listarColecoes(@PathVariable String bookmarkId) {
+           return ResponseEntity.ok(bookmarkService.listarColecoesDoBookmark(bookmarkId));
+       }
     
     
     
