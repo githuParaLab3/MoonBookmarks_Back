@@ -1,8 +1,5 @@
 package com.MoonBookmarks.MoonBookmarks_Back.entities;
 
-
-import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -11,9 +8,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 @Entity
 public class Bookmark {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -29,15 +30,23 @@ public class Bookmark {
 
     private float progresso;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "bookmarks")
+    @JsonBackReference 
     private List<Colecao> colecoes;
 
     private String comentario;
 
     public Bookmark() {}
 
-    public Bookmark(String id, Obra obra, Usuario usuario, Status status, float progresso, List<Colecao> colecoes,
-            String comentario) {
+    public Bookmark(
+        String id,
+        Obra obra,
+        Usuario usuario,
+        Status status,
+        float progresso,
+        List<Colecao> colecoes,
+        String comentario
+    ) {
         this.id = id;
         this.obra = obra;
         this.usuario = usuario;
@@ -102,6 +111,4 @@ public class Bookmark {
     public void setComentario(String comentario) {
         this.comentario = comentario;
     }
-
-    
 }

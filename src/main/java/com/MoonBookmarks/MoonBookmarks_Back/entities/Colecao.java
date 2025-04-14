@@ -1,8 +1,5 @@
 package com.MoonBookmarks.MoonBookmarks_Back.entities;
 
-
-import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,17 +8,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+
+import java.util.List;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 public class Colecao {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private String titulo;
     private String descricao;
-
 
     @Lob
     @Column(columnDefinition = "TEXT")
@@ -30,12 +33,25 @@ public class Colecao {
     @ManyToOne
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "colecoes", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+        name = "colecao_bookmark",
+        joinColumns = @JoinColumn(name = "colecao_id"),
+        inverseJoinColumns = @JoinColumn(name = "bookmark_id")
+    )
+    @JsonManagedReference // Gerencia a serialização de coleções de bookmarks
     private List<Bookmark> bookmarks;
 
-    public Colecao(){}
+    public Colecao() {}
 
-    public Colecao(String id, String titulo, String descricao, String foto, Usuario usuario, List<Bookmark> bookmarks) {
+    public Colecao(
+        String id,
+        String titulo,
+        String descricao,
+        String foto,
+        Usuario usuario,
+        List<Bookmark> bookmarks
+    ) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -91,6 +107,4 @@ public class Colecao {
     public void setBookmarks(List<Bookmark> bookmarks) {
         this.bookmarks = bookmarks;
     }
-
-   
 }
