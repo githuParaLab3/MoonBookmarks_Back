@@ -12,7 +12,7 @@ public class BookmarkDTO {
     private Usuario usuario;
     private Status status;
     private float progresso;
-    private List<String> colecaoIds; // Usando apenas IDs das coleções
+    private List<String> colecaoIds; 
     private String comentario;
     
     // Getters e setters

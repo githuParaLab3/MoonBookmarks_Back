@@ -8,10 +8,10 @@ public class ColecaoDTO {
     private String titulo;
     private String descricao;
     private String foto;
-    private Usuario usuario; // Incluindo o usuário diretamente
-    private List<String> bookmarkIds;  // Usando apenas IDs das bookmarks
+    private Usuario usuario; 
+    private List<String> bookmarkIds;  
     
-    // Getters e setters
+ 
     public String getId() {
         return id;
     }

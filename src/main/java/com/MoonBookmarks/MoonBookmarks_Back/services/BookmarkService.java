@@ -37,7 +37,7 @@ public class BookmarkService {
     }
 
     public BookmarkDTO salvar(BookmarkDTO bookmarkDTO) {
-        Bookmark bookmark = BookmarkMapper.fromDTO(bookmarkDTO, colecaoRepository);  // Passando o repositório de coleções
+        Bookmark bookmark = BookmarkMapper.fromDTO(bookmarkDTO, colecaoRepository);  
         Bookmark savedBookmark = bookmarkRepository.save(bookmark);
         return BookmarkMapper.toDTO(savedBookmark);
     }

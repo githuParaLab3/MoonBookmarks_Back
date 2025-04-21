@@ -16,11 +16,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Desabilita CSRF (para APIs REST)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Define JWT como Stateless
+            .csrf(csrf -> csrf.disable()) 
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/**").permitAll() // Libera os endpoints de autenticação
-                .anyRequest().authenticated() // Exige autenticação para todas as outras rotas
+                .requestMatchers("/**").permitAll() 
+                .anyRequest().authenticated() 
             );
 
         return http.build();
@@ -28,6 +28,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Usa BCrypt para criptografar senhas
+        return new BCryptPasswordEncoder(); 
     }
 }

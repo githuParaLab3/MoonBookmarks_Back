@@ -37,24 +37,24 @@ public class ColecaoService {
     }
 
     public ColecaoDTO salvar(ColecaoDTO colecaoDTO) {
-        // Verificando se a coleção já existe com base no ID
+       
         Optional<Colecao> colecaoOpt = colecaoRepository.findById(colecaoDTO.getId());
         
         if (colecaoOpt.isPresent()) {
-            // Coleção existe, então vamos atualizar
+         
             Colecao colecaoExistente = colecaoOpt.get();
             
-            // Atualizando os dados da coleção existente
+
             colecaoExistente.setTitulo(colecaoDTO.getTitulo());
             colecaoExistente.setFoto(colecaoDTO.getFoto()); 
             colecaoExistente.setDescricao(colecaoDTO.getDescricao());
-            // Adicione outros campos que você precisa atualizar
+  
             
-            // Salvando a coleção atualizada
+  
             Colecao colecaoAtualizada = colecaoRepository.save(colecaoExistente);
             return ColecaoMapper.toDTO(colecaoAtualizada);
         } else {
-            // Se a coleção não existir, criamos uma nova
+            
             Colecao colecaoNova = ColecaoMapper.fromDTO(colecaoDTO, bookmarkRepository);
             Colecao colecaoCriada = colecaoRepository.save(colecaoNova);
             return ColecaoMapper.toDTO(colecaoCriada);

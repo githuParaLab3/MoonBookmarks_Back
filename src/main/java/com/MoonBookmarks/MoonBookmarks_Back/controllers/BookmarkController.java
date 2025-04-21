@@ -50,21 +50,21 @@ public class BookmarkController {
 
     @PostMapping("/{bookmarkId}/colecoes/{colecaoId}")
     public ResponseEntity<BookmarkDTO> adicionarColecao(@PathVariable String bookmarkId, @PathVariable String colecaoId) {
-        // Adicionando coleção ao bookmark
+       
         BookmarkDTO updatedBookmark = bookmarkService.adicionarColecaoAoBookmark(bookmarkId, colecaoId);
         return ResponseEntity.ok(updatedBookmark);
     }
 
     @DeleteMapping("/{bookmarkId}/colecoes/{colecaoId}")
     public ResponseEntity<BookmarkDTO> removerColecao(@PathVariable String bookmarkId, @PathVariable String colecaoId) {
-        // Removendo coleção do bookmark
+        
         BookmarkDTO updatedBookmark = bookmarkService.removerColecaoDoBookmark(bookmarkId, colecaoId);
         return ResponseEntity.ok(updatedBookmark);
     }
 
     @GetMapping("/{bookmarkId}/colecoes")
     public ResponseEntity<List<ColecaoDTO>> listarColecoes(@PathVariable String bookmarkId) {
-        // Listando coleções associadas a um bookmark
+   
         List<ColecaoDTO> colecoes = bookmarkService.listarColecoesDoBookmark(bookmarkId);
         return ResponseEntity.ok(colecoes);
     }

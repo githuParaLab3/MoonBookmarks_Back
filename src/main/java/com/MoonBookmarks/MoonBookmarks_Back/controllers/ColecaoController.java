@@ -38,7 +38,7 @@ public class ColecaoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ColecaoDTO> atualizarColecao(@PathVariable String id, @RequestBody ColecaoDTO colecaoDTO) {
-        // Atualizando a coleção com base no DTO recebido
+     
         ColecaoDTO updatedColecao = colecaoService.salvar(colecaoDTO);
         return ResponseEntity.ok(updatedColecao);
     }
@@ -51,14 +51,14 @@ public class ColecaoController {
 
     @PostMapping("/{colecaoId}/bookmarks/{bookmarkId}")
     public ResponseEntity<ColecaoDTO> adicionarBookmark(@PathVariable String colecaoId, @PathVariable String bookmarkId) {
-        // Adicionando bookmark à coleção
+        
         ColecaoDTO updatedColecao = colecaoService.adicionarBookmarkNaColecao(colecaoId, bookmarkId);
         return ResponseEntity.ok(updatedColecao);
     }
 
     @DeleteMapping("/{colecaoId}/bookmarks/{bookmarkId}")
     public ResponseEntity<ColecaoDTO> removerBookmark(@PathVariable String colecaoId, @PathVariable String bookmarkId) {
-        // Removendo bookmark da coleção
+       
         ColecaoDTO updatedColecao = colecaoService.removerBookmarkDaColecao(colecaoId, bookmarkId);
         return ResponseEntity.ok(updatedColecao);
     }

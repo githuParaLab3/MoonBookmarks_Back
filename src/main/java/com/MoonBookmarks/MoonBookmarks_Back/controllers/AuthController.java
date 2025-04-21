@@ -33,7 +33,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest request) {
-        // Verifica se o email ou senha estão vazios
+       
         if (request.getEmail() == null || request.getEmail().isEmpty() || request.getSenha() == null || request.getSenha().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Email ou senha não podem ser vazios"));
         }
@@ -41,17 +41,17 @@ public class AuthController {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(request.getEmail());
 
     
-        // Verifica se o usuário existe e a senha corresponde
+        
         if (usuarioOpt.isPresent() && passwordEncoder.matches(request.getSenha(), usuarioOpt.get().getSenha())) {
-            // Gera o token JWT
+            
             String token = jwtUtil.generateToken(request.getEmail());
     
-            // Retorna o token e o id do usuário em um Map
+           
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
-            response.put("userId", usuarioOpt.get().getId().toString()); // Incluindo o id do usuário na resposta
+            response.put("userId", usuarioOpt.get().getId().toString()); 
     
-            return ResponseEntity.ok(response); // Retorna o token e o id do usuário
+            return ResponseEntity.ok(response); 
         }
     
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Credenciais inválidas"));
@@ -60,20 +60,20 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody Usuario usuario) {
-        // Verifica se o email já está cadastrado
+        
         if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário já registrado com esse e-mail");
         }
 
-        // Verifica se o email e a senha não estão vazios
+       
         if (usuario.getEmail() == null || usuario.getEmail().isEmpty() || usuario.getSenha() == null || usuario.getSenha().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email e senha não podem ser vazios");
         }
 
-        // Criptografa a senha
+    
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 
-        // Salva o usuário no banco
+
         usuarioRepository.save(usuario);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Usuário registrado com sucesso!");
