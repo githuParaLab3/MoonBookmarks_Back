@@ -37,29 +37,27 @@ public class ColecaoService {
     }
 
     public ColecaoDTO salvar(ColecaoDTO colecaoDTO) {
-       
-        Optional<Colecao> colecaoOpt = colecaoRepository.findById(colecaoDTO.getId());
-        
-        if (colecaoOpt.isPresent()) {
-         
-            Colecao colecaoExistente = colecaoOpt.get();
-            
-
-            colecaoExistente.setTitulo(colecaoDTO.getTitulo());
-            colecaoExistente.setFoto(colecaoDTO.getFoto()); 
-            colecaoExistente.setDescricao(colecaoDTO.getDescricao());
-  
-            
-  
-            Colecao colecaoAtualizada = colecaoRepository.save(colecaoExistente);
-            return ColecaoMapper.toDTO(colecaoAtualizada);
-        } else {
-            
-            Colecao colecaoNova = ColecaoMapper.fromDTO(colecaoDTO, bookmarkRepository);
-            Colecao colecaoCriada = colecaoRepository.save(colecaoNova);
-            return ColecaoMapper.toDTO(colecaoCriada);
+        if (colecaoDTO.getId() != null) {
+            Optional<Colecao> colecaoOpt = colecaoRepository.findById(colecaoDTO.getId());
+    
+            if (colecaoOpt.isPresent()) {
+                Colecao colecaoExistente = colecaoOpt.get();
+    
+                colecaoExistente.setTitulo(colecaoDTO.getTitulo());
+                colecaoExistente.setFoto(colecaoDTO.getFoto());
+                colecaoExistente.setDescricao(colecaoDTO.getDescricao());
+    
+                Colecao colecaoAtualizada = colecaoRepository.save(colecaoExistente);
+                return ColecaoMapper.toDTO(colecaoAtualizada);
+            }
         }
+    
+       
+        Colecao colecaoNova = ColecaoMapper.fromDTO(colecaoDTO, bookmarkRepository);
+        Colecao colecaoCriada = colecaoRepository.save(colecaoNova);
+        return ColecaoMapper.toDTO(colecaoCriada);
     }
+
 
 
     public void deletar(String id) {
